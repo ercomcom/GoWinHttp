@@ -257,6 +257,22 @@ func SendRequest(
 	return nil
 }
 
+var writeData = wh.NewProc("WinHttpWriteData")
+
+//Write data from the given hrequest
+func WriteData(hRequest HInternet, data *byte, datalen int, writenData *int) error {
+	var r uintptr
+	var err error
+	r, _, err = writeData.Call(uintptr(hRequest),
+		uintptr(unsafe.Pointer(data)),
+		uintptr(datalen),
+		uintptr(unsafe.Pointer(writenData)))
+	if r != 1 {
+		return err
+	}
+	return nil
+}
+
 var receiveResponse = wh.NewProc("WinHttpReceiveResponse")
 
 // ReceiveResponse waits to receive the response to an HTTP request
