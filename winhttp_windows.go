@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 // Package winhttp provides a Golang-ish interface to the WinHTTP
@@ -9,20 +10,20 @@
 // software making use of winhttp.dll.
 //
 // Some notes:
-// - Error handling may look a little weird. As per
-//   https://godoc.org/golang.org/x/sys/windows#LazyProc.Call , we
-//   *must* check the primary return value to see if the error is
-//   valid. To be more Golang-y, we do that here and return nil for
-//   errors when we don't have an error condition.
-// - We currently do not support WinHTTP in async operation.
-// - To avoid constantly looking up procs, we cache them here in
-//   private globals.
-// - To help mesh one's understanding of what's going on here against
-//   MSDN documentation, we're using field and argument names from MSDN.
-// - Arguments and struct fields marked as reserved in MSDN are either
-//   not present in function arguments here or not exported in struct
-//   types. We have to include them in structs to preserve memory
-//   layouts that Windows will expect.
+//   - Error handling may look a little weird. As per
+//     https://godoc.org/golang.org/x/sys/windows#LazyProc.Call , we
+//     *must* check the primary return value to see if the error is
+//     valid. To be more Golang-y, we do that here and return nil for
+//     errors when we don't have an error condition.
+//   - We currently do not support WinHTTP in async operation.
+//   - To avoid constantly looking up procs, we cache them here in
+//     private globals.
+//   - To help mesh one's understanding of what's going on here against
+//     MSDN documentation, we're using field and argument names from MSDN.
+//   - Arguments and struct fields marked as reserved in MSDN are either
+//     not present in function arguments here or not exported in struct
+//     types. We have to include them in structs to preserve memory
+//     layouts that Windows will expect.
 package winhttp
 
 import (
@@ -259,7 +260,7 @@ func SendRequest(
 
 var writeData = wh.NewProc("WinHttpWriteData")
 
-//Write data from the given hrequest
+// Write data from the given hrequest
 func WriteData(hRequest HInternet, data *byte, datalen int, writenData *int) error {
 	var r uintptr
 	var err error
@@ -509,4 +510,19 @@ func SetTimeouts(
 	}
 
 	return nil
+}
+
+var detectAutoProxyConfigUrl = wh.NewProc("WinHttpDetectAutoProxyConfigUrl")
+
+func DetectAutoProxyConfigUrl(autoDetectFlags uint32) (string, error) {
+	var autoConfigUrl *uint16
+	ok, _, err := detectAutoProxyConfigUrl.Call(
+		uintptr(autoDetectFlags),
+		uintptr(unsafe.Pointer(&autoConfigUrl)),
+	)
+	if ok == 0 {
+		return "", err
+	}
+	defer globalFree(autoConfigUrl)
+	return windows.UTF16PtrToString(autoConfigUrl), nil
 }
