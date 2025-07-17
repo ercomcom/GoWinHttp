@@ -1,4 +1,4 @@
-[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/ercomcom/gowinhttp)
+[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/ercomcom/GoWinHttp@v0.1.0)
 
 
 # GoWinHttp
