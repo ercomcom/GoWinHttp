@@ -1,4 +1,4 @@
-module winhttp
+module github.com/ercomcom/gowinhttp
 
 go 1.24.3
 
