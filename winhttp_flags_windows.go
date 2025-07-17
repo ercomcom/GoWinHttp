@@ -1,8 +1,9 @@
+//go:build windows
 // +build windows
 
 // Implements flags necessary for working with WinHTTP.
 
-package winhttp
+package gowinhttp
 
 import (
 	"syscall"

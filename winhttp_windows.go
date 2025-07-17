@@ -24,7 +24,7 @@
 //     not present in function arguments here or not exported in struct
 //     types. We have to include them in structs to preserve memory
 //     layouts that Windows will expect.
-package winhttp
+package gowinhttp
 
 import (
 	"syscall"
