@@ -1,6 +1,6 @@
 //go:build windows
 
-package gowinhttp
+package winhttp
 
 import (
 	"testing"

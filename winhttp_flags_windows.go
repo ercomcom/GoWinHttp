@@ -3,7 +3,7 @@
 
 // Implements flags necessary for working with WinHTTP.
 
-package gowinhttp
+package winhttp
 
 import (
 	"syscall"
